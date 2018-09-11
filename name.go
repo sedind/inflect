@@ -2,10 +2,7 @@ package inflect
 
 import (
 	"fmt"
-	"path/filepath"
 	"strings"
-
-	"github.com/gobuffalo/envy"
 )
 
 // Name is a string that represents the "name" of a thing, like an app, model, etc...
@@ -133,20 +130,6 @@ func (n Name) Lower() string {
 // ParamID returns foo_bar_id
 func (n Name) ParamID() string {
 	return fmt.Sprintf("%s_id", strings.Replace(n.UnderSingular(), "/", "_", -1))
-}
-
-// Package returns go package
-func (n Name) Package() string {
-	key := string(n)
-
-	for _, gp := range envy.GoPaths() {
-		key = strings.TrimPrefix(key, filepath.Join(gp, "src"))
-		key = strings.TrimPrefix(key, gp)
-	}
-	key = strings.TrimPrefix(key, string(filepath.Separator))
-
-	key = strings.Replace(key, "\\", "/", -1)
-	return key
 }
 
 // Char returns first character in lower case, this is useful for methods inside a struct.
